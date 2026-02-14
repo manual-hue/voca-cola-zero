@@ -4,8 +4,23 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Voca Cola Zero — AI Daily Vocabulary",
   description:
-    "Learn 40 new English and Chinese vocabulary words every day, powered by AI.",
+    "매일 AI가 만들어주는 40개의 새로운 단어. 비용 제로, 노력 제로.",
   manifest: "/manifest.json",
+  openGraph: {
+    title: "Voca Cola Zero",
+    description: "매일 AI가 만들어주는 40개의 새로운 단어. 비용 제로, 노력 제로.",
+    url: "https://voca-cola-zero.netlify.app",
+    siteName: "Voca Cola Zero",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Voca Cola Zero",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
