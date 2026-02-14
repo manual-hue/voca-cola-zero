@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Push subscriptions — server-side only via Firebase Admin SDK.
+    // No client-side reads or writes allowed.
+    match /subscriptions/{subId} {
+      allow read, write: if false;
+    }
+  }
+}

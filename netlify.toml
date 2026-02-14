@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[functions]
+  # Netlify scheduled functions directory
+  directory = "netlify/functions"
+
+# Next.js plugin handles routing automatically
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
