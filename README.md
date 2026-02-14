@@ -94,5 +94,6 @@ A refreshing daily vocabulary PWA that fuels your brain without the bulk. Powere
 ---
 
 <div align="center">
-**📜 License** MIT License. Feel free to use and refresh your brain!<br/>© 2026 Voca Cola Zero. Built with passion for better learning.
+  <b>📜 License</b> MIT License. Feel free to use and refresh your brain!<br/><br/>
+  <span style="color: #888;">© 2026 Voca Cola Zero. Built with passion for better learning.</span>
 </div>
