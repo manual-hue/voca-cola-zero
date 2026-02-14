@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { VocabCard } from "./VocabCard";
 import { NotificationToggle } from "./NotificationToggle";
+import { AdSlot } from "./AdSlot";
 
 interface VocabWord {
   word: string;
@@ -160,14 +161,18 @@ export function Dashboard() {
         {data && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {data.vocabulary.map((item, i) => (
-              <VocabCard
-                key={`${item.word}-${i}`}
-                word={item.word}
-                meaning={item.meaning}
-                pronunciation={item.pronunciation}
-                language={data.language}
-                index={i}
-              />
+              <Fragment key={`${item.word}-${i}`}>
+                <VocabCard
+                  word={item.word}
+                  meaning={item.meaning}
+                  pronunciation={item.pronunciation}
+                  language={data.language}
+                  index={i}
+                />
+                {(i === 9 || i === 24) && process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID && (
+                  <AdSlot adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID} />
+                )}
+              </Fragment>
             ))}
           </div>
         )}
