@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import React from "react";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://voca-cola-zero.netlify.app"),
   title: "Voca Cola Zero — AI Daily Vocabulary",
   description:
     "매일 AI가 만들어주는 40개의 새로운 단어. 비용 제로, 노력 제로.",
