@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { VocabCard } from "./VocabCard";
 import { NotificationToggle } from "./NotificationToggle";
 import { AdSlot } from "./AdSlot";
@@ -27,7 +28,8 @@ export function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generatedToday, setGeneratedToday] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+
+
 
   const fetchVocabulary = useCallback(async () => {
     setLoading(true);
@@ -56,6 +58,19 @@ export function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            style: {
+              background: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              color: "#1e40af",
+            },
+            iconTheme: { primary: "#2563eb", secondary: "#eff6ff" },
+          },
+        }}
+      />
       {/* Header */}
       <header className="sticky top-0 z-10 backdrop-blur-md bg-white/80 border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-4 py-4">
@@ -77,8 +92,7 @@ export function Dashboard() {
               <button
                 onClick={() => {
                   if (generatedToday) {
-                    setShowToast(true);
-                    setTimeout(() => setShowToast(false), 2000);
+                    toast.success("하루에 한 번만 생성할 수 있습니다!");
                   } else {
                     fetchVocabulary();
                   }
@@ -92,11 +106,6 @@ export function Dashboard() {
               >
                 {loading ? "Generating..." : generatedToday ? "Today Done" : "New Words"}
               </button>
-              {showToast && (
-                <div className="absolute top-full mt-2 right-0 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg whitespace-nowrap shadow-lg animate-fade-in">
-                  하루에 한 번만 생성할 수 있습니다!
-                </div>
-              )}
             </div>
           </div>
           </div>
@@ -109,8 +118,7 @@ export function Dashboard() {
               <button
                 onClick={() => {
                   if (generatedToday) {
-                    setShowToast(true);
-                    setTimeout(() => setShowToast(false), 2000);
+                    toast.success("하루에 한 번만 생성할 수 있습니다!");
                   } else {
                     fetchVocabulary();
                   }
@@ -124,11 +132,6 @@ export function Dashboard() {
               >
                 {loading ? "Generating..." : generatedToday ? "Today Done" : "New Words"}
               </button>
-              {showToast && (
-                <div className="absolute top-full mt-2 left-0 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg whitespace-nowrap shadow-lg animate-fade-in">
-                  하루에 한 번만 생성할 수 있습니다!
-                </div>
-              )}
             </div>
           </div>
         </div>
