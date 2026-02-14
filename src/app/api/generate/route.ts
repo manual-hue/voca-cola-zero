@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getDb } from "@/lib/firebase-admin";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -15,12 +16,12 @@ interface VocabResponse {
   vocabulary: VocabWord[];
 }
 
-// Daily cache: stores generated vocabulary per day so we only call the API once
-let cachedData: { dateKey: string; data: VocabResponse } | null = null;
+// In-memory cache (fast path within same serverless instance)
+let memCache: { dateKey: string; data: VocabResponse } | null = null;
 
 function getTodayKey(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+  const now = new Date(Date.now() + 9 * 60 * 60 * 1000); // KST
+  return now.toISOString().split("T")[0]; // "2026-02-15"
 }
 
 function getDayOfYear(): number {
@@ -30,7 +31,6 @@ function getDayOfYear(): number {
   );
 }
 
-// Models to try in order — if primary is rate-limited, fall back to alternatives
 const MODELS = [
   "gemini-2.5-flash",
   "gemini-2.0-flash",
@@ -58,11 +58,9 @@ async function generateWithFallback(
           errMsg.includes("quota");
 
         if (isQuotaError && attempt === 0) {
-          // Wait before retry on same model
           await new Promise((r) => setTimeout(r, 5000));
           continue;
         }
-        // Move to next model
         break;
       }
     }
@@ -72,12 +70,30 @@ async function generateWithFallback(
 }
 
 export async function GET(request: NextRequest) {
-  // Return cached data if we already generated for today
   const todayKey = getTodayKey();
-  if (cachedData && cachedData.dateKey === todayKey) {
-    return NextResponse.json(cachedData.data);
+
+  // 1. In-memory cache (fastest)
+  if (memCache && memCache.dateKey === todayKey) {
+    return NextResponse.json(memCache.data);
   }
 
+  // 2. Firestore cache (persistent across serverless instances)
+  try {
+    const doc = await getDb()
+      .collection("daily-vocabulary")
+      .doc(todayKey)
+      .get();
+
+    if (doc.exists) {
+      const data = doc.data() as VocabResponse;
+      memCache = { dateKey: todayKey, data };
+      return NextResponse.json(data);
+    }
+  } catch (e) {
+    console.error("Firestore read error:", e);
+  }
+
+  // 3. Generate new vocabulary via Gemini
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -114,17 +130,30 @@ Provide exactly 40 items in the vocabulary array. Make words range from beginner
   try {
     const text = await generateWithFallback(genAI, prompt);
 
-    // Strip markdown fences if present
     const cleaned = text.replace(/```json\s*|```\s*/g, "").trim();
     const data: VocabResponse = JSON.parse(cleaned);
 
-    // Validate structure
     if (!data.vocabulary || data.vocabulary.length === 0) {
       throw new Error("Empty vocabulary array from AI");
     }
 
-    // Cache for the rest of the day
-    cachedData = { dateKey: todayKey, data };
+    // Save to Firestore
+    try {
+      await getDb()
+        .collection("daily-vocabulary")
+        .doc(todayKey)
+        .set({
+          subject: data.subject,
+          language: data.language,
+          vocabulary: data.vocabulary,
+          createdAt: new Date().toISOString(),
+        });
+    } catch (e) {
+      console.error("Firestore write error:", e);
+    }
+
+    // Save to memory cache
+    memCache = { dateKey: todayKey, data };
 
     return NextResponse.json(data);
   } catch (error) {
