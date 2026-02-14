@@ -2,7 +2,7 @@
 
 import { usePushSubscription } from "@/hooks/usePushSubscription";
 
-export function NotificationToggle() {
+export function NotificationToggle({ fullWidth = false }: { fullWidth?: boolean }) {
   const { isSubscribed, isSupported, loading, subscribe, unsubscribe } =
     usePushSubscription();
 
@@ -18,7 +18,9 @@ export function NotificationToggle() {
     <button
       onClick={isSubscribed ? unsubscribe : subscribe}
       disabled={loading}
-      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all disabled:opacity-50 ${
+      className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all disabled:opacity-50 ${
+        fullWidth ? "w-full" : ""
+      } ${
         isSubscribed
           ? "bg-green-50 text-green-700 hover:bg-green-100"
           : "bg-slate-100 text-slate-600 hover:bg-slate-200"

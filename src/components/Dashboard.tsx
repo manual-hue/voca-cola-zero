@@ -100,9 +100,11 @@ export function Dashboard() {
           </div>
           </div>
           {/* Mobile buttons */}
-          <div className="flex sm:hidden items-center gap-3 mt-3">
-            <NotificationToggle />
-            <div className="relative">
+          <div className="flex sm:hidden gap-3 mt-3">
+            <div className="flex-1">
+              <NotificationToggle fullWidth />
+            </div>
+            <div className="relative flex-1">
               <button
                 onClick={() => {
                   if (generatedToday) {
@@ -113,7 +115,7 @@ export function Dashboard() {
                   }
                 }}
                 disabled={loading}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`w-full px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   generatedToday
                     ? "bg-slate-400 text-white cursor-not-allowed"
                     : "bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50"
