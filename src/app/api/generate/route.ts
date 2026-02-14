@@ -97,6 +97,11 @@ export async function GET(request: NextRequest) {
     }
   } catch (e) {
     console.error("Firestore read error:", e);
+    const errMsg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json(
+      { error: `데이터베이스 연결에 실패했습니다: ${errMsg}` },
+      { status: 503 },
+    );
   }
 
   // 3. Generate new vocabulary via Gemini
