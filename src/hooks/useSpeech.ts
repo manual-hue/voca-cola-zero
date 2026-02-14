@@ -1,59 +1,34 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 export function useSpeech() {
   const [speaking, setSpeaking] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-
-    const loadVoices = () => {
-      voicesRef.current = window.speechSynthesis.getVoices();
-    };
-
-    loadVoices();
-    window.speechSynthesis.addEventListener("voiceschanged", loadVoices);
-    return () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", loadVoices);
-    };
-  }, []);
-
-  const findVoice = useCallback((lang: string) => {
-    const voices = voicesRef.current;
-    return (
-      voices.find((v) => v.lang === lang) ||
-      voices.find((v) => v.lang.startsWith(lang.split("-")[0]))
-    );
-  }, []);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const speak = useCallback((text: string, lang: "en-US" | "zh-CN") => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
 
-    window.speechSynthesis.cancel();
+    setSpeaking(true);
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
+    const params = new URLSearchParams({ text, lang });
+    const audio = new Audio(`/api/tts?${params}`);
+    audioRef.current = audio;
 
-    const voice = findVoice(lang);
-    if (voice) utterance.voice = voice;
+    audio.onended = () => setSpeaking(false);
+    audio.onerror = () => setSpeaking(false);
 
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-  }, [findVoice]);
+    audio.play().catch(() => setSpeaking(false));
+  }, []);
 
   const stop = useCallback(() => {
-    if (typeof window === "undefined") return;
-    window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
     setSpeaking(false);
   }, []);
 
