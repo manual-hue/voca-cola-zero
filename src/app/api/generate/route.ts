@@ -19,16 +19,22 @@ interface VocabResponse {
 // In-memory cache (fast path within same serverless instance)
 let memCache: { dateKey: string; data: VocabResponse } | null = null;
 
+function getKSTDate(): Date {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000);
+}
+
 function getTodayKey(): string {
-  const now = new Date(Date.now() + 9 * 60 * 60 * 1000); // KST
-  return now.toISOString().split("T")[0]; // "2026-02-15"
+  const kst = getKSTDate();
+  const y = kst.getUTCFullYear();
+  const m = String(kst.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(kst.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 function getDayOfYear(): number {
-  return Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
-      86400000,
-  );
+  const kst = getKSTDate();
+  const start = new Date(Date.UTC(kst.getUTCFullYear(), 0, 0));
+  return Math.floor((kst.getTime() - start.getTime()) / 86400000);
 }
 
 const MODELS = [
