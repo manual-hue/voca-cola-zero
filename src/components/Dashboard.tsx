@@ -172,7 +172,7 @@ export function Dashboard() {
                   language={data.language}
                   index={i}
                 />
-                {(i === 9 || i === 24) && process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID && (
+                {(i === 19 || i === 39) && process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID && (
                   <AdSlot adSlot={process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID} />
                 )}
               </Fragment>

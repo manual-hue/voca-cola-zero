@@ -23,13 +23,10 @@ export function VocabCard({
 
   return (
     <div className="group relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-primary-300">
-      <span className="absolute top-3 right-3 text-xs font-medium text-slate-300">
-        #{index + 1}
-      </span>
 
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-bold text-slate-900 truncate">{word}</h3>
+          <h3 className="text-lg font-bold text-slate-900 truncate">{index + 1}. {word}</h3>
           <p className="text-sm text-slate-500 mt-0.5 font-mono">
             {pronunciation}
           </p>

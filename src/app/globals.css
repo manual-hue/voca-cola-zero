@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 body {
+  font-family: var(--font-inter), "Pretendard Variable", Pretendard, "Noto Sans SC", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

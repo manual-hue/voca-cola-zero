@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://voca-cola-zero.netlify.app"),
@@ -39,6 +42,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap"
+        />
         {process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID && (
           <script
             async
@@ -48,7 +61,7 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body>{children}</body>
+      <body className={inter.variable}>{children}</body>
     </html>
   );
 }

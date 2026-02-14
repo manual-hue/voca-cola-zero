@@ -7,6 +7,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter)', '"Pretendard Variable"', 'Pretendard', '"Noto Sans SC"', 'sans-serif'],
+      },
       colors: {
         primary: {
           50: "#eff6ff",
