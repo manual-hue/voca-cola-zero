@@ -26,6 +26,7 @@ export function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generatedToday, setGeneratedToday] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const fetchVocabulary = useCallback(async () => {
     setLoading(true);
@@ -70,14 +71,31 @@ export function Dashboard() {
           </div>
           <div className="flex items-center gap-3">
             <NotificationToggle />
-            <button
-              onClick={fetchVocabulary}
-              disabled={loading || generatedToday}
-              title={generatedToday ? "하루에 한 번만 생성할 수 있습니다!" : ""}
-              className="px-4 py-2 rounded-full bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? "Generating..." : generatedToday ? "Today Done" : "New Words"}
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => {
+                  if (generatedToday) {
+                    setShowToast(true);
+                    setTimeout(() => setShowToast(false), 2000);
+                  } else {
+                    fetchVocabulary();
+                  }
+                }}
+                disabled={loading}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  generatedToday
+                    ? "bg-slate-400 text-white cursor-not-allowed"
+                    : "bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50"
+                }`}
+              >
+                {loading ? "Generating..." : generatedToday ? "Today Done" : "New Words"}
+              </button>
+              {showToast && (
+                <div className="absolute top-full mt-2 right-0 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg whitespace-nowrap shadow-lg animate-fade-in">
+                  하루에 한 번만 생성할 수 있습니다!
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
