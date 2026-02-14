@@ -57,20 +57,21 @@ export function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="sticky top-0 z-10 backdrop-blur-md bg-white/80 border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Voca Cola Zero
-            </h1>
-            {data && (
-              <p className="text-sm text-slate-500 mt-0.5">
-                {data.language} &middot; {data.subject} &middot;{" "}
-                {data.vocabulary.length} words
-              </p>
-            )}
-          </div>
-          <div className="flex items-center gap-3">
-            <NotificationToggle />
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+                Voca Cola Zero
+              </h1>
+              {data && (
+                <p className="text-sm text-slate-500 mt-0.5">
+                  {data.language} &middot; {data.subject} &middot;{" "}
+                  {data.vocabulary.length} words
+                </p>
+              )}
+            </div>
+            <div className="hidden sm:flex items-center gap-3">
+              <NotificationToggle />
             <div className="relative">
               <button
                 onClick={() => {
@@ -92,6 +93,36 @@ export function Dashboard() {
               </button>
               {showToast && (
                 <div className="absolute top-full mt-2 right-0 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg whitespace-nowrap shadow-lg animate-fade-in">
+                  하루에 한 번만 생성할 수 있습니다!
+                </div>
+              )}
+            </div>
+          </div>
+          </div>
+          {/* Mobile buttons */}
+          <div className="flex sm:hidden items-center gap-3 mt-3">
+            <NotificationToggle />
+            <div className="relative">
+              <button
+                onClick={() => {
+                  if (generatedToday) {
+                    setShowToast(true);
+                    setTimeout(() => setShowToast(false), 2000);
+                  } else {
+                    fetchVocabulary();
+                  }
+                }}
+                disabled={loading}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  generatedToday
+                    ? "bg-slate-400 text-white cursor-not-allowed"
+                    : "bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50"
+                }`}
+              >
+                {loading ? "Generating..." : generatedToday ? "Today Done" : "New Words"}
+              </button>
+              {showToast && (
+                <div className="absolute top-full mt-2 left-0 px-3 py-2 bg-slate-800 text-white text-xs rounded-lg whitespace-nowrap shadow-lg animate-fade-in">
                   하루에 한 번만 생성할 수 있습니다!
                 </div>
               )}
