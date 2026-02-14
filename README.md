@@ -27,13 +27,6 @@ A refreshing daily vocabulary PWA that fuels your brain without the bulk. Powere
 3. A **Push Notification** is sent to your device via the Web Push API.
 4. You open the **PWA**, study the words, and listen to the pronunciation!
 
-### 🛠 Tech Stack
-- **Framework:** Next.js 15, React 19
-- **AI Engine:** Google Gemini 2.5 Flash
-- **Database:** Firebase Firestore
-- **Push Service:** Web Push API (VAPID)
-- **Styling:** Tailwind CSS (Zero-Cola Dark Mode Theme)
-- **Deployment:** Netlify
 </details>
 
 <details>
@@ -56,13 +49,6 @@ A refreshing daily vocabulary PWA that fuels your brain without the bulk. Powere
 3. **Web Push API**를 통해 여러분의 기기로 푸시 알림을 발송합니다.
 4. **PWA**를 열어 단어를 학습하고 원어민 발음을 확인하면 끝!
 
-### 🛠 기술 레시피
-- **프레임워크:** Next.js 15, React 19
-- **AI 엔진:** Google Gemini 2.5 Flash
-- **데이터베이스:** Firebase Firestore
-- **알림:** Web Push API (VAPID)
-- **스타일링:** Tailwind CSS (제로 콜라 테마: 레드 & 블랙)
-- **배포:** Netlify
 </details>
 
 ---
