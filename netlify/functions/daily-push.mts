@@ -1,6 +1,6 @@
 import type { Config } from "@netlify/functions";
 
-// This scheduled function calls the /api/push endpoint daily at 8 AM UTC.
+// This scheduled function calls the /api/push endpoint daily at 9 AM KST (0 AM UTC).
 // The actual push logic lives in the Next.js API route.
 
 export default async () => {
@@ -31,5 +31,5 @@ export default async () => {
 };
 
 export const config: Config = {
-  schedule: "0 8 * * *",
+  schedule: "0 0 * * *",
 };
