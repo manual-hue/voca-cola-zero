@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://voca-cola-zero.netlify.app"),
   title: "Voca Cola Zero — AI Daily Vocabulary",
   description:
-    "매일 AI가 만들어주는 40개의 새로운 단어. 비용 제로, 노력 제로.",
+      "매일 아침 AI로부터 신선하게 배달되는 단어. 비용 제로, 노력 제로.",
   manifest: "/manifest.json",
   openGraph: {
     title: "Voca Cola Zero",
-    description: "매일 AI가 만들어주는 40개의 새로운 단어. 비용 제로, 노력 제로.",
+    description: "매일 아침 AI로부터 신선하게 배달되는 단어. 비용 제로, 노력 제로.",
     url: "https://voca-cola-zero.netlify.app",
     siteName: "Voca Cola Zero",
     images: [
