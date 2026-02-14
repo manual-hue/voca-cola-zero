@@ -40,3 +40,6 @@ next-env.d.ts
 .idea
 .vscode
 .claude
+
+# Local Netlify folder
+.netlify
