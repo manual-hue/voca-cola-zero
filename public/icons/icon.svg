@@ -1,27 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <!-- Background -->
-  <rect width="512" height="512" rx="100" fill="#0f172a"/>
-  <!-- Cola can body -->
-  <rect x="176" y="120" width="160" height="280" rx="30" fill="#dc2626"/>
-  <!-- Cola can top -->
-  <ellipse cx="256" cy="120" rx="80" ry="16" fill="#ef4444"/>
-  <!-- Cola can bottom -->
-  <ellipse cx="256" cy="400" rx="80" ry="16" fill="#b91c1c"/>
-  <!-- White stripe -->
-  <rect x="176" y="220" width="160" height="60" fill="white" opacity="0.9"/>
-  <!-- Text on stripe -->
-  <text x="256" y="258" dominant-baseline="middle" text-anchor="middle"
-    font-family="system-ui, sans-serif" font-size="32" font-weight="900" fill="#dc2626" letter-spacing="2">
-    VOCA
-  </text>
-  <!-- Zero text below -->
-  <text x="256" y="320" dominant-baseline="middle" text-anchor="middle"
-    font-family="system-ui, sans-serif" font-size="22" font-weight="bold" fill="white" opacity="0.8">
-    ZERO
-  </text>
-  <!-- Bubbles -->
-  <circle cx="210" cy="170" r="6" fill="white" opacity="0.3"/>
-  <circle cx="290" cy="155" r="4" fill="white" opacity="0.25"/>
-  <circle cx="240" cy="145" r="5" fill="white" opacity="0.2"/>
-  <circle cx="270" cy="175" r="3" fill="white" opacity="0.3"/>
+  <rect width="512" height="512" rx="100" fill="#f8f8f8"/>
+
+  <!-- Jindo dog face -->
+  <!-- Left ear -->
+  <polygon points="145,210 185,120 220,215" fill="#c4a882"/>
+  <polygon points="155,208 185,138 212,212" fill="#d4bc9a"/>
+  <!-- Right ear -->
+  <polygon points="367,210 327,120 292,215" fill="#c4a882"/>
+  <polygon points="357,208 327,138 300,212" fill="#d4bc9a"/>
+
+  <!-- Head -->
+  <ellipse cx="256" cy="280" rx="105" ry="95" fill="#d4bc9a"/>
+  <!-- Face center stripe -->
+  <ellipse cx="256" cy="270" rx="40" ry="75" fill="#e8dcc8"/>
+  <!-- Muzzle -->
+  <ellipse cx="256" cy="310" rx="45" ry="35" fill="#e8dcc8"/>
+
+  <!-- Eyes -->
+  <ellipse cx="215" cy="265" rx="13" ry="14" fill="#2c1810"/>
+  <ellipse cx="297" cy="265" rx="13" ry="14" fill="#2c1810"/>
+  <!-- Eye shine -->
+  <circle cx="219" cy="260" r="4.5" fill="white"/>
+  <circle cx="301" cy="260" r="4.5" fill="white"/>
+
+  <!-- Nose -->
+  <ellipse cx="256" cy="305" rx="18" ry="13" fill="#2c1810"/>
+  <ellipse cx="256" cy="302" rx="6" ry="3" fill="#5c4033"/>
+
+  <!-- Mouth -->
+  <path d="M245,316 Q256,328 267,316" fill="none" stroke="#2c1810" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Cheeks -->
+  <circle cx="188" cy="295" r="16" fill="#e8b4b8" opacity="0.35"/>
+  <circle cx="324" cy="295" r="16" fill="#e8b4b8" opacity="0.35"/>
+
+  <!-- Graduation cap -->
+  <!-- Cap base -->
+  <path d="M150,195 L256,155 L362,195 L256,225 Z" fill="#1e293b"/>
+  <!-- Cap top -->
+  <rect x="220" y="145" width="72" height="18" rx="2" fill="#1e293b"/>
+  <!-- Cap button -->
+  <circle cx="256" cy="155" r="6" fill="#1e293b"/>
+  <!-- Tassel string -->
+  <path d="M256,155 Q280,150 310,175" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+  <!-- Tassel -->
+  <rect x="305" y="175" width="4" height="25" rx="2" fill="#f59e0b"/>
+  <rect x="300" y="200" width="14" height="6" rx="3" fill="#f59e0b"/>
 </svg>
