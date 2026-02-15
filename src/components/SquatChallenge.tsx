@@ -8,7 +8,7 @@ import { SquatProgress } from "./SquatProgress";
 import { CompletionCelebration } from "./CompletionCelebration";
 import { AppShell } from "./AppShell";
 
-const TARGET = 50;
+const TARGET = 30;
 
 export function SquatChallenge() {
   const t = useTranslations("Squat");
