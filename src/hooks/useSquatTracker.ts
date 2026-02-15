@@ -56,5 +56,16 @@ export function useSquatTracker({ target, onComplete }: { target: number; onComp
     return () => window.removeEventListener("devicemotion", handleMotion);
   }, [isTracking, handleMotion]);
 
-  return { count, isTracking, start };
+  return {
+    count,
+    isTracking,
+    start,
+    hasMotion: true,
+    permissionGranted: true,
+    manualIncrement: () => {
+      countRef.current += 1;
+      setCount(countRef.current);
+      if (countRef.current >= target) onComplete();
+    }
+  };
 }
