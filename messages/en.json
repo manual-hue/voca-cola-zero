@@ -1,0 +1,70 @@
+{
+  "Home": {
+    "selectChallenge": "Select your challenge",
+    "completedToday": "{count}/4 completed today"
+  },
+  "Module": {
+    "language": "Language",
+    "languageSub": "40 words daily",
+    "squat": "Squat",
+    "squatSub": "50 reps challenge",
+    "literature": "Literature",
+    "literatureSub": "Transcribe & learn",
+    "history": "History",
+    "historySub": "Daily insight"
+  },
+  "Language": {
+    "generating": "Generating...",
+    "todayDone": "Today Done",
+    "newWords": "New Words",
+    "oncePerDay": "You can only generate once per day!",
+    "generatingVocab": "Generating vocabulary with AI...",
+    "retry": "Retry"
+  },
+  "Squat": {
+    "ready": "Ready to squat?",
+    "holdPhone": "Hold your phone while squatting. The accelerometer will count your reps automatically.",
+    "start": "Start",
+    "noMotion": "No motion sensor detected. Use manual mode:",
+    "tap": "TAP",
+    "tracking": "Tracking your squats via motion sensor...",
+    "complete": "Squats Complete!",
+    "repsDone": "{target} reps done for today. Great work!",
+    "subtitle": "{target} reps daily challenge"
+  },
+  "Literature": {
+    "typePassage": "Type the passage below:",
+    "startTyping": "Start typing...",
+    "submit": "Submit",
+    "accuracy": "Accuracy: {value}%",
+    "chars": "{current} / {total} chars",
+    "complete": "Literature Complete!",
+    "accuracyResult": "{value}% accuracy",
+    "todayDone": "Today's transcription challenge is done.",
+    "tryAgain": "{value}% accuracy — try again tomorrow!",
+    "todaysExcerpt": "Today's Excerpt",
+    "loadingExcerpt": "Loading literature excerpt...",
+    "retry": "Retry"
+  },
+  "History": {
+    "keyFacts": "Key Facts",
+    "reflection": "Reflection",
+    "markAsRead": "Mark as Read",
+    "complete": "History Complete!",
+    "todayReviewed": "Today's insight has been reviewed.",
+    "loadingInsight": "Loading today's insight...",
+    "retry": "Retry"
+  },
+  "Common": {
+    "retry": "Retry",
+    "backToHome": "Back to Home"
+  },
+  "Notification": {
+    "on": "Notifications On",
+    "enable": "Enable Notifications",
+    "notSupported": "Push notifications not supported in this browser."
+  },
+  "Completion": {
+    "redirecting": "Redirecting to home in {countdown}s..."
+  }
+}

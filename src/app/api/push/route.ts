@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/firebase-admin";
+import { getDayOfYear } from "@/lib/date-utils";
 import { NextRequest, NextResponse } from "next/server";
 import webPush from "web-push";
 
@@ -20,16 +21,9 @@ async function sendPushToAll() {
   initWebPush();
 
   const snapshot = await getDb().collection("subscriptions").get();
+  if (snapshot.empty) return { sent: 0, failed: 0 };
 
-  if (snapshot.empty) {
-    return { sent: 0, failed: 0 };
-  }
-
-  const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
-      86400000,
-  );
-  const language = dayOfYear % 2 !== 0 ? "English" : "Chinese";
+  const language = getDayOfYear() % 2 !== 0 ? "English" : "Chinese";
 
   const payload = JSON.stringify({
     title: "Voca Cola Zero",
@@ -40,48 +34,41 @@ async function sendPushToAll() {
   let sent = 0;
   let failed = 0;
 
-  const promises = snapshot.docs.map(async (doc) => {
-    const { subscription } = doc.data();
-    try {
-      await webPush.sendNotification(subscription, payload);
-      sent++;
-    } catch (error: unknown) {
-      const statusCode =
-        error instanceof Error && "statusCode" in error
-          ? (error as { statusCode: number }).statusCode
-          : undefined;
-      // Remove expired/invalid subscriptions
-      if (statusCode === 410 || statusCode === 404) {
-        await doc.ref.delete();
+  await Promise.all(
+    snapshot.docs.map(async (doc) => {
+      const { subscription } = doc.data();
+      try {
+        await webPush.sendNotification(subscription, payload);
+        sent++;
+      } catch (error: unknown) {
+        const statusCode =
+          error instanceof Error && "statusCode" in error
+            ? (error as { statusCode: number }).statusCode
+            : undefined;
+        if (statusCode === 410 || statusCode === 404) {
+          await doc.ref.delete();
+        }
+        failed++;
       }
-      failed++;
-    }
-  });
+    }),
+  );
 
-  await Promise.all(promises);
   return { sent, failed };
 }
 
 function verifySecret(request: NextRequest): boolean {
   const secret = process.env.PUSH_API_SECRET;
-  if (!secret) {
-    // Secret MUST be configured — refuse to run without it
-    return false;
-  }
-  const authHeader = request.headers.get("authorization");
-  return authHeader === `Bearer ${secret}`;
+  if (!secret) return false;
+  return request.headers.get("authorization") === `Bearer ${secret}`;
 }
 
-// Scheduled function handler (Netlify cron calls this internally).
-// Protected by secret so it can't be triggered by external GET requests.
-export async function GET(request: NextRequest) {
+async function handlePush(request: NextRequest) {
   if (!verifySecret(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const result = await sendPushToAll();
-    return NextResponse.json(result);
+    return NextResponse.json(await sendPushToAll());
   } catch (error) {
     console.error("Push notification error:", error);
     return NextResponse.json(
@@ -91,20 +78,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Manual trigger via POST — also requires secret
-export async function POST(request: NextRequest) {
-  if (!verifySecret(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const result = await sendPushToAll();
-    return NextResponse.json(result);
-  } catch (error) {
-    console.error("Push notification error:", error);
-    return NextResponse.json(
-      { error: "Failed to send push notifications" },
-      { status: 500 },
-    );
-  }
-}
+export { handlePush as GET, handlePush as POST };

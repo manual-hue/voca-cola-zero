@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
@@ -20,6 +21,8 @@ export function CompletionCelebration({
   children,
 }: CompletionCelebrationProps) {
   const router = useRouter();
+  const t = useTranslations("Completion");
+  const tCommon = useTranslations("Common");
   const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export function CompletionCelebration({
             transition={{ delay: 0.6 }}
             className="text-sm text-slate-400 mt-6"
           >
-            {countdown}초 후 홈으로 이동합니다...
+            {t("redirecting", { countdown })}
           </motion.p>
         ) : (
           <motion.div
@@ -92,7 +95,7 @@ export function CompletionCelebration({
               href="/"
               className="inline-block px-6 py-2.5 rounded-full bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
             >
-              Back to Home
+              {tCommon("backToHome")}
             </Link>
           </motion.div>
         )}

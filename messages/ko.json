@@ -1,0 +1,70 @@
+{
+  "Home": {
+    "selectChallenge": "챌린지를 선택하세요.",
+    "completedToday": "오늘 {count}/4 완료"
+  },
+  "Module": {
+    "language": "언어",
+    "languageSub": "매일 40단어",
+    "squat": "스쿼트",
+    "squatSub": "50회 챌린지",
+    "literature": "문학",
+    "literatureSub": "필사하며 배우기",
+    "history": "역사",
+    "historySub": "오늘의 인사이트"
+  },
+  "Language": {
+    "generating": "생성 중...",
+    "todayDone": "오늘 완료",
+    "newWords": "새 단어",
+    "oncePerDay": "하루에 한 번만 생성할 수 있습니다!",
+    "generatingVocab": "AI로 단어를 생성하는 중...",
+    "retry": "다시 시도"
+  },
+  "Squat": {
+    "ready": "스쿼트 준비됐나요?",
+    "holdPhone": "스쿼트하면서 폰을 들고 있으세요. 가속도 센서가 자동으로 횟수를 셉니다.",
+    "start": "시작",
+    "noMotion": "모션 센서가 감지되지 않습니다. 수동 모드를 사용하세요:",
+    "tap": "탭",
+    "tracking": "모션 센서로 스쿼트를 추적하는 중...",
+    "complete": "스쿼트 완료!",
+    "repsDone": "오늘 {target}회 완료. 수고하셨습니다!",
+    "subtitle": "매일 {target}회 챌린지"
+  },
+  "Literature": {
+    "typePassage": "아래 구절을 입력하세요:",
+    "startTyping": "입력을 시작하세요.",
+    "submit": "제출",
+    "accuracy": "정확도: {value}%",
+    "chars": "{current} / {total} 글자",
+    "complete": "문학 완료!",
+    "accuracyResult": "정확도 {value}%",
+    "todayDone": "오늘의 필사 챌린지를 완료했습니다.",
+    "tryAgain": "정확도 {value}% — 내일 다시 도전하세요!",
+    "todaysExcerpt": "오늘의 발췌",
+    "loadingExcerpt": "문학 발췌문 로딩 중...",
+    "retry": "다시 시도"
+  },
+  "History": {
+    "keyFacts": "핵심 사실",
+    "reflection": "생각해보기",
+    "markAsRead": "읽음 표시",
+    "complete": "역사 완료!",
+    "todayReviewed": "오늘의 인사이트를 확인했습니다.",
+    "loadingInsight": "오늘의 인사이트 로딩 중...",
+    "retry": "다시 시도"
+  },
+  "Common": {
+    "retry": "다시 시도",
+    "backToHome": "홈으로"
+  },
+  "Notification": {
+    "on": "알림 켜짐",
+    "enable": "알림 받기",
+    "notSupported": "이 브라우저에서는 푸시 알림을 지원하지 않습니다."
+  },
+  "Completion": {
+    "redirecting": "{countdown}초 후 홈으로 이동합니다..."
+  }
+}

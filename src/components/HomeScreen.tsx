@@ -1,17 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { getTodayKey } from "@/lib/client-date";
 import { MODULES } from "@/types/modules";
 import { ModuleCard } from "./ModuleCard";
 import { NotificationToggle } from "./NotificationToggle";
+import { LocaleToggle } from "./LocaleToggle";
 import { PageTransition } from "./PageTransition";
 
-function getTodayKey(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-}
-
 export function HomeScreen() {
+  const t = useTranslations("Home");
+  const tMod = useTranslations("Module");
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -26,6 +26,13 @@ export function HomeScreen() {
 
   const completedCount = Object.values(completed).filter(Boolean).length;
 
+  const moduleI18n: Record<string, { title: string; subtitle: string }> = {
+    language: { title: tMod("language"), subtitle: tMod("languageSub") },
+    squat: { title: tMod("squat"), subtitle: tMod("squatSub") },
+    literature: { title: tMod("literature"), subtitle: tMod("literatureSub") },
+    history: { title: tMod("history"), subtitle: tMod("historySub") },
+  };
+
   return (
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -33,16 +40,19 @@ export function HomeScreen() {
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Voca Cola Zero</h1>
-              <NotificationToggle />
+              <div className="flex items-center gap-2">
+                <LocaleToggle />
+                <NotificationToggle />
+              </div>
             </div>
           </div>
         </header>
 
         <main className="max-w-2xl mx-auto px-4 py-8">
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-slate-900">Select your challenge</h2>
+            <h2 className="text-xl font-semibold text-slate-900">{t("selectChallenge")}</h2>
             <p className="text-sm text-slate-500 mt-1">
-              {completedCount}/4 completed today
+              {t("completedToday", { count: completedCount })}
             </p>
           </div>
 
@@ -53,6 +63,8 @@ export function HomeScreen() {
                 module={mod}
                 index={i}
                 completed={completed[mod.id]}
+                titleOverride={moduleI18n[mod.id]?.title}
+                subtitleOverride={moduleI18n[mod.id]?.subtitle}
               />
             ))}
           </div>

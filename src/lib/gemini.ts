@@ -2,10 +2,14 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const MODELS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-2.0-flash-lite"];
 
+let _genAI: GoogleGenerativeAI | undefined;
+
 export function getGenAI(): GoogleGenerativeAI {
+  if (_genAI) return _genAI;
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error("GEMINI_API_KEY가 설정되지 않았습니다.");
-  return new GoogleGenerativeAI(apiKey);
+  _genAI = new GoogleGenerativeAI(apiKey);
+  return _genAI;
 }
 
 export async function generateWithFallback(

@@ -1,4 +1,5 @@
 import { TextToSpeechClient } from "@google-cloud/text-to-speech";
+import { getServiceAccountCredentials } from "@/lib/credentials";
 import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -14,24 +15,11 @@ let _client: TextToSpeechClient | undefined;
 
 function getClient(): TextToSpeechClient {
   if (_client) return _client;
-
-  const base64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
-  if (!base64) {
-    throw new Error("FIREBASE_SERVICE_ACCOUNT_BASE64 env var is not set");
-  }
-
-  const credentials = JSON.parse(
-    Buffer.from(base64, "base64").toString("utf-8"),
-  );
-
+  const creds = getServiceAccountCredentials();
   _client = new TextToSpeechClient({
-    credentials: {
-      client_email: credentials.client_email,
-      private_key: credentials.private_key,
-    },
-    projectId: credentials.project_id,
+    credentials: { client_email: creds.client_email, private_key: creds.private_key },
+    projectId: creds.project_id,
   });
-
   return _client;
 }
 
@@ -45,9 +33,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (text.length > MAX_TEXT_LENGTH) {
-    return new Response(`Text exceeds ${MAX_TEXT_LENGTH} characters`, {
-      status: 400,
-    });
+    return new Response(`Text exceeds ${MAX_TEXT_LENGTH} characters`, { status: 400 });
   }
 
   const voiceConfig = ALLOWED_LANGS.get(lang);
@@ -56,8 +42,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const client = getClient();
-    const [response] = await client.synthesizeSpeech({
+    const [response] = await getClient().synthesizeSpeech({
       input: { text },
       voice: voiceConfig,
       audioConfig: { audioEncoding: "MP3" },

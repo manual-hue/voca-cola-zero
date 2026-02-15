@@ -1,61 +1,20 @@
-import { getDb } from "@/lib/firebase-admin";
-import { getGenAI, generateWithFallback } from "@/lib/gemini";
-import { getTodayKey, getDayOfYear } from "@/lib/date-utils";
-import { NextRequest, NextResponse } from "next/server";
+import { handleDailyContent } from "@/lib/daily-content";
+import { getDayOfYear } from "@/lib/date-utils";
 
 export const dynamic = "force-dynamic";
-
-interface VocabWord {
-  word: string;
-  meaning: string;
-  pronunciation: string;
-}
 
 interface VocabResponse {
   subject: string;
   language: string;
-  vocabulary: VocabWord[];
+  vocabulary: { word: string; meaning: string; pronunciation: string }[];
 }
 
-let memCache: { dateKey: string; data: VocabResponse } | null = null;
+export async function GET() {
+  const language = getDayOfYear() % 2 !== 0 ? "English" : "Chinese";
 
-export async function GET(request: NextRequest) {
-  const todayKey = getTodayKey();
-
-  if (memCache && memCache.dateKey === todayKey) {
-    return NextResponse.json(memCache.data);
-  }
-
-  try {
-    const doc = await getDb().collection("daily-vocabulary").doc(todayKey).get();
-    if (doc.exists) {
-      const data = doc.data() as VocabResponse;
-      memCache = { dateKey: todayKey, data };
-      return NextResponse.json(data);
-    }
-  } catch (e) {
-    console.error("Firestore read error:", e);
-    const errMsg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json(
-      { error: `데이터베이스 연결에 실패했습니다: ${errMsg}` },
-      { status: 503 },
-    );
-  }
-
-  let genAI;
-  try {
-    genAI = getGenAI();
-  } catch {
-    return NextResponse.json(
-      { error: "GEMINI_API_KEY가 설정되지 않았습니다." },
-      { status: 500 },
-    );
-  }
-
-  const dayOfYear = getDayOfYear();
-  const language = dayOfYear % 2 !== 0 ? "English" : "Chinese";
-
-  const prompt = `Generate exactly 40 vocabulary words for language learning.
+  return handleDailyContent<VocabResponse>({
+    collection: "daily-vocabulary",
+    prompt: `Generate exactly 40 vocabulary words for language learning.
 Language: ${language}
 Today's theme: Pick an interesting, practical daily-life topic (e.g., cooking, travel, technology, emotions, business, nature).
 
@@ -72,49 +31,9 @@ Return ONLY valid JSON matching this exact schema, no markdown fences:
   ]
 }
 
-Provide exactly 40 items in the vocabulary array. Make words range from beginner to intermediate level.`;
-
-  try {
-    const text = await generateWithFallback(genAI, prompt);
-    const cleaned = text.replace(/```json\s*|```\s*/g, "").trim();
-    const data: VocabResponse = JSON.parse(cleaned);
-
-    if (!data.vocabulary || data.vocabulary.length === 0) {
-      throw new Error("Empty vocabulary array from AI");
-    }
-
-    try {
-      await getDb().collection("daily-vocabulary").doc(todayKey).set({
-        subject: data.subject,
-        language: data.language,
-        vocabulary: data.vocabulary,
-        createdAt: new Date().toISOString(),
-      });
-    } catch (e) {
-      console.error("Firestore write error:", e);
-    }
-
-    memCache = { dateKey: todayKey, data };
-    return NextResponse.json(data);
-  } catch (error) {
-    const errMsg = error instanceof Error ? error.message : String(error);
-    const isQuota =
-      errMsg.includes("429") ||
-      errMsg.includes("RESOURCE_EXHAUSTED") ||
-      errMsg.includes("quota");
-
-    console.error("Gemini generation error:", error);
-
-    if (isQuota) {
-      return NextResponse.json(
-        { error: "API 무료 할당량이 초과되었습니다. 잠시 후 다시 시도해주세요. (약 1분 대기)" },
-        { status: 429 },
-      );
-    }
-
-    return NextResponse.json(
-      { error: "단어 생성에 실패했습니다. 다시 시도해주세요." },
-      { status: 500 },
-    );
-  }
+Provide exactly 40 items in the vocabulary array. Make words range from beginner to intermediate level.`,
+    validate: (data) => !!data.vocabulary?.length,
+    quotaMsg: "API 무료 할당량이 초과되었습니다. 잠시 후 다시 시도해주세요. (약 1분 대기)",
+    errorMsg: "단어 생성에 실패했습니다. 다시 시도해주세요.",
+  });
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type SquatState = "idle" | "down" | "up";
+type SquatState = "idle" | "down";
 
 interface UseSquatTrackerOptions {
   target: number;

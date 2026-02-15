@@ -8,9 +8,11 @@ interface ModuleCardProps {
   module: ModuleConfig;
   index: number;
   completed?: boolean;
+  titleOverride?: string;
+  subtitleOverride?: string;
 }
 
-export function ModuleCard({ module, index, completed }: ModuleCardProps) {
+export function ModuleCard({ module, index, completed, titleOverride, subtitleOverride }: ModuleCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -28,8 +30,8 @@ export function ModuleCard({ module, index, completed }: ModuleCardProps) {
             {module.icon}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-bold text-slate-900">{module.title}</h3>
-            <p className="text-sm text-slate-500 mt-0.5">{module.subtitle}</p>
+            <h3 className="text-lg font-bold text-slate-900">{titleOverride ?? module.title}</h3>
+            <p className="text-sm text-slate-500 mt-0.5">{subtitleOverride ?? module.subtitle}</p>
           </div>
           {completed ? (
             <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">

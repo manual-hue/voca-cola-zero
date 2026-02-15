@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { getTodayKey } from "@/lib/client-date";
 import { CompletionCelebration } from "./CompletionCelebration";
 import { AppShell } from "./AppShell";
-import { PageTransition } from "./PageTransition";
 import { AdSlot } from "./AdSlot";
 
 interface HistoryData {
@@ -15,12 +16,9 @@ interface HistoryData {
   reflection: string;
 }
 
-function getTodayKey(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-}
-
 export function HistoryChallenge() {
+  const t = useTranslations("History");
+  const tMod = useTranslations("Module");
   const [data, setData] = useState<HistoryData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,7 +69,7 @@ export function HistoryChallenge() {
 
       <div className="rounded-2xl bg-white border border-slate-200 p-6 mb-6">
         <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">
-          Key Facts
+          {t("keyFacts")}
         </h3>
         <ul className="space-y-3">
           {data.keyFacts.map((fact, i) => (
@@ -87,7 +85,7 @@ export function HistoryChallenge() {
 
       <div className="rounded-2xl bg-amber-50 border border-amber-200 p-6 mb-6">
         <h3 className="text-sm font-semibold text-amber-700 uppercase tracking-wide mb-2">
-          Reflection
+          {t("reflection")}
         </h3>
         <p className="text-slate-700 italic">{data.reflection}</p>
       </div>
@@ -96,35 +94,32 @@ export function HistoryChallenge() {
 
   if (completed) {
     return (
-      <PageTransition>
-        <AppShell title="History" subtitle={data ? `${data.category} · ${data.topic}` : undefined}>
+      <AppShell title={tMod("history")} subtitle={data ? `${data.category} · ${data.topic}` : undefined}>
           {loading && (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-              <p className="mt-4 text-slate-500 text-sm">Loading today&apos;s insight...</p>
+              <p className="mt-4 text-slate-500 text-sm">{t("loadingInsight")}</p>
             </div>
           )}
           <CompletionCelebration
-            title="History Complete!"
-            subtitle="Today's insight has been reviewed."
+            title={t("complete")}
+            subtitle={t("todayReviewed")}
           >
             {historyContent}
           </CompletionCelebration>
         </AppShell>
-      </PageTransition>
     );
   }
 
   return (
-    <PageTransition>
       <AppShell
-        title="History"
+        title={tMod("history")}
         subtitle={data ? `${data.category} · ${data.topic}` : undefined}
       >
         {loading && (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-10 h-10 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-            <p className="mt-4 text-slate-500 text-sm">Loading today&apos;s insight...</p>
+            <p className="mt-4 text-slate-500 text-sm">{t("loadingInsight")}</p>
           </div>
         )}
 
@@ -135,7 +130,7 @@ export function HistoryChallenge() {
               onClick={fetchHistory}
               className="ml-4 px-3 py-1 rounded-full bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors shrink-0"
             >
-              Retry
+              {t("retry")}
             </button>
           </div>
         )}
@@ -167,7 +162,7 @@ export function HistoryChallenge() {
               className="rounded-2xl bg-white border border-slate-200 p-6 mb-6"
             >
               <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">
-                Key Facts
+                {t("keyFacts")}
               </h3>
               <ul className="space-y-3">
                 {data.keyFacts.map((fact, i) => (
@@ -194,7 +189,7 @@ export function HistoryChallenge() {
               className="rounded-2xl bg-amber-50 border border-amber-200 p-6 mb-6"
             >
               <h3 className="text-sm font-semibold text-amber-700 uppercase tracking-wide mb-2">
-                Reflection
+                {t("reflection")}
               </h3>
               <p className="text-slate-700 italic">{data.reflection}</p>
             </motion.div>
@@ -203,11 +198,10 @@ export function HistoryChallenge() {
               onClick={markComplete}
               className="w-full px-6 py-3 rounded-full bg-purple-500 text-white font-semibold hover:bg-purple-600 transition-colors"
             >
-              Mark as Read
+              {t("markAsRead")}
             </button>
           </div>
         )}
       </AppShell>
-    </PageTransition>
   );
 }

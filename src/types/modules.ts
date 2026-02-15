@@ -6,7 +6,6 @@ export interface ModuleConfig {
   subtitle: string;
   icon: string;
   href: string;
-  color: string;
   bgColor: string;
 }
 
@@ -17,7 +16,6 @@ export const MODULES: ModuleConfig[] = [
     subtitle: "40 words daily",
     icon: "🗣️",
     href: "/language",
-    color: "text-blue-600",
     bgColor: "bg-blue-50",
   },
   {
@@ -26,7 +24,6 @@ export const MODULES: ModuleConfig[] = [
     subtitle: "50 reps challenge",
     icon: "🏋️",
     href: "/squat",
-    color: "text-orange-600",
     bgColor: "bg-orange-50",
   },
   {
@@ -35,7 +32,6 @@ export const MODULES: ModuleConfig[] = [
     subtitle: "Transcribe & learn",
     icon: "📖",
     href: "/literature",
-    color: "text-emerald-600",
     bgColor: "bg-emerald-50",
   },
   {
@@ -44,7 +40,6 @@ export const MODULES: ModuleConfig[] = [
     subtitle: "Daily insight",
     icon: "🏛️",
     href: "/history",
-    color: "text-purple-600",
     bgColor: "bg-purple-50",
   },
 ];

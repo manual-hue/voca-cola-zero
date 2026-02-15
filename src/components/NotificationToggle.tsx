@@ -1,15 +1,17 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { usePushSubscription } from "@/hooks/usePushSubscription";
 
 export function NotificationToggle({ fullWidth = false }: { fullWidth?: boolean }) {
+  const t = useTranslations("Notification");
   const { isSubscribed, isSupported, loading, subscribe, unsubscribe } =
     usePushSubscription();
 
   if (!isSupported) {
     return (
       <p className="text-xs text-slate-400">
-        Push notifications not supported in this browser.
+        {t("notSupported")}
       </p>
     );
   }
@@ -36,8 +38,8 @@ export function NotificationToggle({ fullWidth = false }: { fullWidth?: boolean 
       {loading
         ? "..."
         : isSubscribed
-          ? "Notifications On"
-          : "Enable Notifications"}
+          ? t("on")
+          : t("enable")}
     </button>
   );
 }

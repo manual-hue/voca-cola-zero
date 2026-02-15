@@ -1,11 +1,12 @@
 "use client";
 
 import { Fragment, useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import toast, { Toaster } from "react-hot-toast";
+import { getTodayKey } from "@/lib/client-date";
 import { VocabCard } from "./VocabCard";
 import { AdSlot } from "./AdSlot";
 import { AppShell } from "./AppShell";
-import { PageTransition } from "./PageTransition";
 
 interface VocabWord {
   word: string;
@@ -19,12 +20,9 @@ interface VocabData {
   vocabulary: VocabWord[];
 }
 
-function getTodayKey(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-}
-
 export function LanguageDashboard() {
+  const t = useTranslations("Language");
+  const tMod = useTranslations("Module");
   const [data, setData] = useState<VocabData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +58,7 @@ export function LanguageDashboard() {
     : undefined;
 
   return (
-    <PageTransition>
+    <>
       <Toaster
         position="top-center"
         toastOptions={{
@@ -70,12 +68,12 @@ export function LanguageDashboard() {
           },
         }}
       />
-      <AppShell title="Language" subtitle={subtitle}>
+      <AppShell title={tMod("language")} subtitle={subtitle}>
         <div className="flex justify-end mb-6">
           <button
             onClick={() => {
               if (generatedToday) {
-                toast.success("하루에 한 번만 생성할 수 있습니다!");
+                toast.success(t("oncePerDay"));
               } else {
                 fetchVocabulary();
               }
@@ -87,7 +85,7 @@ export function LanguageDashboard() {
                 : "bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50"
             }`}
           >
-            {loading ? "Generating..." : generatedToday ? "Today Done" : "New Words"}
+            {loading ? t("generating") : generatedToday ? t("todayDone") : t("newWords")}
           </button>
         </div>
 
@@ -99,7 +97,7 @@ export function LanguageDashboard() {
               disabled={loading}
               className="ml-4 px-3 py-1 rounded-full bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors disabled:opacity-50 shrink-0"
             >
-              Retry
+              {t("retry")}
             </button>
           </div>
         )}
@@ -107,7 +105,7 @@ export function LanguageDashboard() {
         {loading && !data && (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-10 h-10 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin" />
-            <p className="mt-4 text-slate-500 text-sm">Generating vocabulary with AI...</p>
+            <p className="mt-4 text-slate-500 text-sm">{t("generatingVocab")}</p>
           </div>
         )}
 
@@ -130,6 +128,6 @@ export function LanguageDashboard() {
           </div>
         )}
       </AppShell>
-    </PageTransition>
+    </>
   );
 }

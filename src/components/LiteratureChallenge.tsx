@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { getTodayKey } from "@/lib/client-date";
 import { useTranscriptionCheck } from "@/hooks/useTranscriptionCheck";
 import { CompletionCelebration } from "./CompletionCelebration";
 import { AppShell } from "./AppShell";
-import { PageTransition } from "./PageTransition";
 import { AdSlot } from "./AdSlot";
 
 interface LiteratureData {
@@ -15,12 +16,9 @@ interface LiteratureData {
   translation: string;
 }
 
-function getTodayKey(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-}
-
 export function LiteratureChallenge() {
+  const t = useTranslations("Literature");
+  const tMod = useTranslations("Module");
   const [data, setData] = useState<LiteratureData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -67,17 +65,16 @@ export function LiteratureChallenge() {
 
   if (completed) {
     return (
-      <PageTransition>
-        <AppShell title="Literature" subtitle={data ? `${data.title} — ${data.author}` : undefined}>
+      <AppShell title={tMod("literature")} subtitle={data ? `${data.title} — ${data.author}` : undefined}>
           <CompletionCelebration
-            title="Literature Complete!"
-            subtitle={submitted ? `${accuracy}% accuracy` : "Today's transcription challenge is done."}
+            title={t("complete")}
+            subtitle={submitted ? t("accuracyResult", { value: accuracy }) : t("todayDone")}
           >
             {data && (
               <div className="max-w-2xl mx-auto mt-4">
                 <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-6">
                   <h3 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide mb-3">
-                    Today&apos;s Excerpt
+                    {t("todaysExcerpt")}
                   </h3>
                   <p className="text-lg leading-relaxed text-slate-800 font-serif">{data.excerpt}</p>
                   <p className="text-sm text-slate-500 mt-4">{data.translation}</p>
@@ -91,17 +88,15 @@ export function LiteratureChallenge() {
             )}
           </CompletionCelebration>
         </AppShell>
-      </PageTransition>
     );
   }
 
   return (
-    <PageTransition>
-      <AppShell title="Literature" subtitle={data ? `${data.title} — ${data.author}` : undefined}>
+      <AppShell title={tMod("literature")} subtitle={data ? `${data.title} — ${data.author}` : undefined}>
         {loading && (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-10 h-10 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin" />
-            <p className="mt-4 text-slate-500 text-sm">Loading literature excerpt...</p>
+            <p className="mt-4 text-slate-500 text-sm">{t("loadingExcerpt")}</p>
           </div>
         )}
 
@@ -112,7 +107,7 @@ export function LiteratureChallenge() {
               onClick={fetchLiterature}
               className="ml-4 px-3 py-1 rounded-full bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors shrink-0"
             >
-              Retry
+              {t("retry")}
             </button>
           </div>
         )}
@@ -126,14 +121,14 @@ export function LiteratureChallenge() {
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Type the passage below:
+                {t("typePassage")}
               </label>
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 rows={6}
                 className="w-full rounded-xl border border-slate-200 p-4 text-base focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
-                placeholder="Start typing..."
+                placeholder={t("startTyping")}
                 disabled={submitted}
               />
             </div>
@@ -151,8 +146,8 @@ export function LiteratureChallenge() {
                   ))}
                 </div>
                 <div className="mt-3 flex items-center gap-4 text-sm text-slate-500">
-                  <span>Accuracy: {accuracy}%</span>
-                  <span>{input.length} / {data.excerpt.length} chars</span>
+                  <span>{t("accuracy", { value: accuracy })}</span>
+                  <span>{t("chars", { current: input.length, total: data.excerpt.length })}</span>
                 </div>
               </div>
             )}
@@ -163,12 +158,12 @@ export function LiteratureChallenge() {
                 disabled={!isComplete}
                 className="w-full px-6 py-3 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Submit
+                {t("submit")}
               </button>
             ) : (
               <div className="rounded-xl p-4 text-center bg-amber-50 border border-amber-200 text-amber-700">
                 <p className="font-semibold">
-                  {accuracy}% accuracy — try again tomorrow!
+                  {t("tryAgain", { value: accuracy })}
                 </p>
               </div>
             )}
@@ -181,6 +176,5 @@ export function LiteratureChallenge() {
           </div>
         )}
       </AppShell>
-    </PageTransition>
   );
 }
