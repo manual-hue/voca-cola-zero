@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Dashboard } from "@/components/Dashboard";
+import { HomeScreen } from "@/components/HomeScreen";
 
 export default function Home() {
   useEffect(() => {
@@ -12,5 +12,5 @@ export default function Home() {
     }
   }, []);
 
-  return <Dashboard />;
+  return <HomeScreen />;
 }

@@ -1,7 +1,7 @@
 {
   "name": "Voca Cola Zero",
   "short_name": "VocaCola",
-  "description": "AI-powered daily vocabulary learning — 40 words a day",
+  "description": "AI-powered daily self-improvement — 4 challenges a day",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8fafc",

@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = "voca-cola-v2";
+const CACHE_NAME = "voca-cola-v3";
 
 // Install: skip waiting immediately (no pre-caching of dynamic pages)
 self.addEventListener("install", () => {
@@ -55,7 +55,7 @@ self.addEventListener("fetch", (event) => {
 
 // Push notification handler
 self.addEventListener("push", (event) => {
-  let data = { title: "Voca Cola Zero", body: "New vocabulary is ready!" };
+  let data = { title: "Voca Cola Zero", body: "Today's challenges are ready! Language, Squat, Literature & History." };
 
   if (event.data) {
     try {

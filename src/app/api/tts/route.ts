@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     return new Response(Buffer.from(content).buffer, {
       headers: {
         "Content-Type": "audio/mpeg",
-        "Cache-Control": "public, max-age=86400",
+        "Cache-Control": "private, max-age=86400",
       },
     });
   } catch (error) {

@@ -7,13 +7,13 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://voca-cola-zero.netlify.app"),
-  title: "Voca Cola Zero — AI Daily Vocabulary",
+  title: "Voca Cola Zero — Daily Self-Improvement",
   description:
-      "매일 아침 AI로부터 신선하게 배달되는 단어. 비용 제로, 노력 제로.",
+      "매일 신선하게 배달되는 4가지 챌린지. 비용 제로, 노력 제로.",
   manifest: "/manifest.json",
   openGraph: {
     title: "Voca Cola Zero",
-    description: "매일 아침 AI로부터 신선하게 배달되는 단어. 비용 제로, 노력 제로.",
+    description: "매일 신선하게 배달되는 4가지 챌린지. 비용 제로, 노력 제로.",
     url: "https://voca-cola-zero.netlify.app",
     siteName: "Voca Cola Zero",
     images: [

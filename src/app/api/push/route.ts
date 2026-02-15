@@ -33,7 +33,7 @@ async function sendPushToAll() {
 
   const payload = JSON.stringify({
     title: "Voca Cola Zero",
-    body: `Today's ${language} vocabulary is ready! 40 new words to learn.`,
+    body: `Today's challenges are ready! ${language} vocabulary, squats, literature & history.`,
     url: "/",
   });
 

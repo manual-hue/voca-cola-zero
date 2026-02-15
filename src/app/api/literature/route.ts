@@ -1,23 +1,19 @@
 import { getDb } from "@/lib/firebase-admin";
 import { getGenAI, generateWithFallback } from "@/lib/gemini";
-import { getTodayKey, getDayOfYear } from "@/lib/date-utils";
+import { getTodayKey } from "@/lib/date-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-interface VocabWord {
-  word: string;
-  meaning: string;
-  pronunciation: string;
-}
-
-interface VocabResponse {
-  subject: string;
+interface LiteratureResponse {
+  title: string;
+  author: string;
+  excerpt: string;
   language: string;
-  vocabulary: VocabWord[];
+  translation: string;
 }
 
-let memCache: { dateKey: string; data: VocabResponse } | null = null;
+let memCache: { dateKey: string; data: LiteratureResponse } | null = null;
 
 export async function GET(request: NextRequest) {
   const todayKey = getTodayKey();
@@ -27,9 +23,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const doc = await getDb().collection("daily-vocabulary").doc(todayKey).get();
+    const doc = await getDb().collection("daily-literature").doc(todayKey).get();
     if (doc.exists) {
-      const data = doc.data() as VocabResponse;
+      const data = doc.data() as LiteratureResponse;
       memCache = { dateKey: todayKey, data };
       return NextResponse.json(data);
     }
@@ -52,42 +48,31 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const dayOfYear = getDayOfYear();
-  const language = dayOfYear % 2 !== 0 ? "English" : "Chinese";
-
-  const prompt = `Generate exactly 40 vocabulary words for language learning.
-Language: ${language}
-Today's theme: Pick an interesting, practical daily-life topic (e.g., cooking, travel, technology, emotions, business, nature).
+  const prompt = `Select a famous passage from English or Chinese classic literature.
+The excerpt should be 2-4 sentences long, suitable for transcription practice.
+Alternate between English and Chinese works.
 
 Return ONLY valid JSON matching this exact schema, no markdown fences:
 {
-  "subject": "<the topic you chose>",
-  "language": "${language}",
-  "vocabulary": [
-    {
-      "word": "<the word in ${language}>",
-      "meaning": "<translation/definition in Korean>",
-      "pronunciation": "<phonetic pronunciation guide>"
-    }
-  ]
-}
-
-Provide exactly 40 items in the vocabulary array. Make words range from beginner to intermediate level.`;
+  "title": "<title of the work>",
+  "author": "<author name>",
+  "excerpt": "<the passage in its original language, 2-4 sentences>",
+  "language": "<English or Chinese>",
+  "translation": "<Korean translation of the excerpt>"
+}`;
 
   try {
     const text = await generateWithFallback(genAI, prompt);
     const cleaned = text.replace(/```json\s*|```\s*/g, "").trim();
-    const data: VocabResponse = JSON.parse(cleaned);
+    const data: LiteratureResponse = JSON.parse(cleaned);
 
-    if (!data.vocabulary || data.vocabulary.length === 0) {
-      throw new Error("Empty vocabulary array from AI");
+    if (!data.excerpt || !data.title) {
+      throw new Error("Invalid literature response from AI");
     }
 
     try {
-      await getDb().collection("daily-vocabulary").doc(todayKey).set({
-        subject: data.subject,
-        language: data.language,
-        vocabulary: data.vocabulary,
+      await getDb().collection("daily-literature").doc(todayKey).set({
+        ...data,
         createdAt: new Date().toISOString(),
       });
     } catch (e) {
@@ -107,13 +92,13 @@ Provide exactly 40 items in the vocabulary array. Make words range from beginner
 
     if (isQuota) {
       return NextResponse.json(
-        { error: "API 무료 할당량이 초과되었습니다. 잠시 후 다시 시도해주세요. (약 1분 대기)" },
+        { error: "API 할당량이 초과되었습니다. 잠시 후 다시 시도해주세요." },
         { status: 429 },
       );
     }
 
     return NextResponse.json(
-      { error: "단어 생성에 실패했습니다. 다시 시도해주세요." },
+      { error: "문학 발췌문 생성에 실패했습니다." },
       { status: 500 },
     );
   }
