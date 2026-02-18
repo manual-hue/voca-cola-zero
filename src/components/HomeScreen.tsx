@@ -38,11 +38,11 @@ export function HomeScreen() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <header className="sticky top-0 z-10 backdrop-blur-md bg-white/80 border-b border-slate-200">
           <div className="max-w-2xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Voca Cola Zero</h1>
-              <div className="flex items-center gap-2">
-                <LocaleToggle />
-                <NotificationToggle />
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex-1 sm:flex-none"><LocaleToggle fullWidth /></div>
+                <div className="flex-1 sm:flex-none"><NotificationToggle fullWidth /></div>
               </div>
             </div>
           </div>

@@ -4,10 +4,10 @@
     "completedToday": "{count}/4 completed today"
   },
   "Module": {
-    "language": "Language",
+    "language": "Voca Book",
     "languageSub": "40 words daily",
     "squat": "Squat",
-    "squatSub": "50 reps challenge",
+    "squatSub": "30 reps challenge",
     "literature": "Literature",
     "literatureSub": "Transcribe & learn",
     "history": "History",

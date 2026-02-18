@@ -4,10 +4,10 @@
     "completedToday": "오늘 {count}/4 완료"
   },
   "Module": {
-    "language": "언어",
+    "language": "단어장",
     "languageSub": "매일 40단어",
     "squat": "스쿼트",
-    "squatSub": "50회 챌린지",
+    "squatSub": "30회 챌린지",
     "literature": "문학",
     "literatureSub": "필사하며 배우기",
     "history": "역사",

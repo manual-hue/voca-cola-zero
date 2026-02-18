@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { setLocale } from "@/app/actions";
 
-export function LocaleToggle() {
+export function LocaleToggle({ fullWidth = false }: { fullWidth?: boolean }) {
   const locale = useLocale();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -22,7 +22,7 @@ export function LocaleToggle() {
     <button
       onClick={toggle}
       disabled={isPending}
-      className="px-3 py-1.5 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50"
+      className={`px-3 py-1.5 rounded-full text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 transition-colors disabled:opacity-50 ${fullWidth ? "w-full" : ""}`}
     >
       {locale === "ko" ? "EN" : "KO"}
     </button>
